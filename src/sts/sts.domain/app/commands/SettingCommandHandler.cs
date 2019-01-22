@@ -6,8 +6,8 @@ using core.domain.services;
 
 namespace sts.domain.app.commands
 {
-
-  public abstract class SettingCommandHandler<TCommand> : ICommandHandler<TCommand>
+  public abstract class SettingCommandHandler<TCommand>
+    : ICommandHandler<TCommand>
     where TCommand : Command
   {
     protected readonly ISettingRepository _repository;
