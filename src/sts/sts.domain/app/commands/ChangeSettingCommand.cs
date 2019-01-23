@@ -4,6 +4,7 @@ using sts.domain.model.settings;
 using core.domain.app;
 using core.domain.extensions;
 using core.domain.services;
+using Dawn;
 
 namespace sts.domain.app.commands
 {
@@ -22,7 +23,7 @@ namespace sts.domain.app.commands
   public class ChangeSettingCommandHandler : SettingCommandHandler<ChangeSettingCommand>
   {
 
-    internal ChangeSettingCommandHandler(ISettingRepository settingRepository)
+    public ChangeSettingCommandHandler(ISettingRepository settingRepository)
       : base(settingRepository)
     {
     }
@@ -30,6 +31,8 @@ namespace sts.domain.app.commands
     public override async Task<CommandResult> HandleAsync(ChangeSettingCommand command)
     {
       SettingRoot item = (SettingRoot)command.Item;
+
+      Guard.Argument(item).NotNull(nameof(item));
 
       item.ChangeValues(command.Values);
 

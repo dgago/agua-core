@@ -3,11 +3,14 @@ using System.Reflection;
 using core.domain.app;
 using core.domain.data;
 using core.domain.services;
+using core.domain.services.log;
 using SimpleInjector;
 using sts.domain.app.commands;
+using sts.domain.data;
 
 namespace sts.console
 {
+
   class Program
   {
     static readonly Container container;
@@ -16,11 +19,19 @@ namespace sts.console
     {
       container = new Container();
 
+      container.Register(typeof(ILogAdapter), typeof(ConsoleLogAdapter));
       //container.Register<ISettingRepository, SettingRepository>(Lifestyle.Singleton);
 
       // TODO: debería haber una forma de registrar a todos los repository juntos
-      Assembly[] assemblies = new[] { typeof(IRepository).Assembly };
-      container.Register(typeof(IRepository), assemblies, Lifestyle.Singleton);
+      container.Collection.Register(
+        typeof(IRepository),
+        typeof(IRepository).Assembly);
+      // despues de todo creo que es buena idea poner un tipo generico en irepository
+      // para evitar lo siguiente
+      container.Register(
+        typeof(ISettingRepository),
+        typeof(SettingRepository)
+        );
 
       //container.Register<CreateSettingCommandHandler>(Lifestyle.Singleton);
       //container.Register<ChangeSettingCommandHandler>(Lifestyle.Singleton);

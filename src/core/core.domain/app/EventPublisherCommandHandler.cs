@@ -7,15 +7,9 @@ namespace core.domain.app
       where TCommand : ItemCommand
   {
 
-
-
     private readonly IEventAdapter _eventAdapter;
 
     private readonly ICommandHandler<TCommand> _handler;
-
-
-
-
 
     public EventPublisherCommandHandler(ICommandHandler<TCommand> handler,
         IEventAdapter eventAdapter)
@@ -23,10 +17,6 @@ namespace core.domain.app
       _handler = handler;
       _eventAdapter = eventAdapter;
     }
-
-
-
-
 
     public async Task<CommandResult> HandleAsync(TCommand command)
     {
@@ -37,8 +27,6 @@ namespace core.domain.app
 
       return res;
     }
-
-
 
   }
 }
