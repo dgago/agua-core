@@ -44,7 +44,7 @@ namespace sts.console
         = container.GetInstance<ChangeSettingCommandHandler>();
 
       const string id = "1";
-      ChangeSettingCommand command = new ChangeSettingCommand(id, new { });
+      ChangeSettingCommand command = new ChangeSettingCommand(id, new { a = 1 });
 
       CommandResult res = handler.HandleAsync(command).Result;
     }

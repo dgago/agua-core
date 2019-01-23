@@ -4,6 +4,7 @@ using core.domain.extensions;
 using core.domain.model;
 using core.domain.services;
 using core.domain.services.accessControl;
+using core.domain.services.log;
 
 namespace core.domain.app
 {
@@ -11,11 +12,14 @@ namespace core.domain.app
       where TCommand : ItemCommand
   {
     private readonly ICommandHandler<TCommand> _handler;
+    private readonly ILogAdapter _logger;
 
     public AuthorizeCommandHandler(
-      ICommandHandler<TCommand> handler)
+      ICommandHandler<TCommand> handler,
+      ILogAdapter logAdapter)
     {
       _handler = handler;
+      _logger = logAdapter;
     }
 
     public async Task<CommandResult> HandleAsync(TCommand command)
@@ -33,15 +37,24 @@ namespace core.domain.app
         command.Item = item;
       }
 
-      bool hasAccess = AccessControlDomainService.HasAccess(
-        command.ResourceName,
-        command.Username,
-        command.UserRoles,
-        command.Item);
+      bool hasAccess = command.Username.IsNows() ?
+        AccessControlDomainService.HasAccess(
+          command.ResourceName,
+          command.Client)
+        : AccessControlDomainService.HasAccess(
+          command.ResourceName,
+          command.Username,
+          command.UserRoles,
+          command.Item);
 
       if (!hasAccess)
       {
-        // TODO: Audit log
+        // Audit log
+        _logger.Warning("Unauthorized",
+          command.ResourceName,
+          command.Username,
+          command.UserRoles,
+          command.Item);
 
         throw new UnauthorizedAccessException(command.ResourceName);
       }

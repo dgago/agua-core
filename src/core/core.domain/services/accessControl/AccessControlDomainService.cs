@@ -20,6 +20,13 @@ namespace core.domain.services.accessControl
       return HasAccess(rule, username, roles, item);
     }
 
+    public static bool HasAccess(string resource, string client)
+    {
+      AccessControlRule rule = _rules[resource];
+
+      return HasAccess(rule, client);
+    }
+
     private static bool AcceptsOwner(AccessControlRule rule)
     {
       return (rule.Type & AccessControlType.Owner) != 0;
@@ -74,6 +81,31 @@ namespace core.domain.services.accessControl
       return false;
     }
 
+    private static bool HasAccess(
+      AccessControlRule rule,
+      string client)
+    {
+      // rule is null
+      if (rule == null)
+      {
+        return false;
+      }
+
+      // rule is for clients and client is not present
+      if (client.IsNows())
+      {
+        return false;
+      }
+
+      // rule accepts roles
+      if (IsInClientList(rule, client))
+      {
+        return true;
+      }
+
+      return false;
+    }
+
     private static bool HasRole(AccessControlRule rule, string[] roles)
     {
       return rule.Roles.Any(x => roles.Contains(x));
@@ -87,6 +119,11 @@ namespace core.domain.services.accessControl
     private static bool IsOwner(string username, IAggregateRoot item)
     {
       return username == item.Owner;
+    }
+
+    private static bool IsInClientList(AccessControlRule rule, string client)
+    {
+      return rule.Clients.Contains(client);
     }
 
   }
