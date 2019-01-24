@@ -19,30 +19,30 @@ namespace sts.console
     {
       container = new Container();
 
-      container.Register(typeof(ILogAdapter), typeof(ConsoleLogAdapter));
-      //container.Register<ISettingRepository, SettingRepository>(Lifestyle.Singleton);
+      container.Register<ILogAdapter, ConsoleLogAdapter>(
+        Lifestyle.Singleton);
 
       // TODO: debería haber una forma de registrar a todos los repository juntos
-      container.Collection.Register(
-        typeof(IRepository),
-        typeof(IRepository).Assembly);
+      // container.Collection.Register(
+      //   typeof(IRepository),
+      //   typeof(IRepository).Assembly);
       // despues de todo creo que es buena idea poner un tipo generico en irepository
       // para evitar lo siguiente
-      container.Register(
-        typeof(ISettingRepository),
-        typeof(SettingRepository)
-        );
-
-      //container.Register<CreateSettingCommandHandler>(Lifestyle.Singleton);
-      //container.Register<ChangeSettingCommandHandler>(Lifestyle.Singleton);
+      container.Register<ISettingRepository, SettingRepository>(
+        Lifestyle.Singleton);
 
       // TODO: debería haber una forma de registrar a todos los command handler juntos
-      container.Register(typeof(ICommandHandler<>), typeof(ICommandHandler<>).Assembly, Lifestyle.Singleton);
+      // container.Register(typeof(ICommandHandler<>), typeof(ICommandHandler<>).Assembly, Lifestyle.Singleton);
+
+      container.Register<ICommandHandler<ChangeSettingCommand>, ChangeSettingCommandHandler>();
 
       container.RegisterDecorator(typeof(ICommandHandler<>),
         typeof(AuthorizeCommandHandler<>));
-      container.RegisterDecorator(typeof(ICommandHandler<>),
-        typeof(EventPublisherCommandHandler<>));
+
+      // container.RegisterDecorator(typeof(ICommandHandler<>),
+      //   typeof(EventPublisherCommandHandler<>));
+      // container.RegisterDecorator(typeof(ICommandHandler<>),
+      //   typeof(AuthorizeCommandHandler<>));
 
       container.Verify();
     }
@@ -57,7 +57,15 @@ namespace sts.console
       const string id = "1";
       ChangeSettingCommand command = new ChangeSettingCommand(id, new { a = 1 });
 
-      CommandResult res = handler.HandleAsync(command).Result;
+      try
+      {
+        // TODO: el decorador no funciona porque el método es asíncrono
+        CommandResult res = handler.HandleAsync(command).Result;
+      }
+      catch (System.Exception ex)
+      {
+        Console.WriteLine($"{ex}");
+      }
     }
   }
 }

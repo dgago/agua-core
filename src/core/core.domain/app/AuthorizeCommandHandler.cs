@@ -15,11 +15,11 @@ namespace core.domain.app
     private readonly ILogAdapter _logger;
 
     public AuthorizeCommandHandler(
-      ICommandHandler<TCommand> handler,
-      ILogAdapter logAdapter)
+      ILogAdapter logAdapter,
+      ICommandHandler<TCommand> handler)
     {
-      _handler = handler;
       _logger = logAdapter;
+      _handler = handler;
     }
 
     public async Task<CommandResult> HandleAsync(TCommand command)
