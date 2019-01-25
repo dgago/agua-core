@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using core.domain.app;
 using core.domain.services;
@@ -6,7 +7,7 @@ using sts.domain.model.settings;
 
 namespace sts.domain.app.commands
 {
-  public class RemoveSettingCommand : ItemCommand
+  public class RemoveSettingCommand : Command
   {
     public RemoveSettingCommand(string id, object values) : base(id)
     {
@@ -16,13 +17,26 @@ namespace sts.domain.app.commands
   public class RemoveSettingCommandHandler
     : SettingCommandHandler<RemoveSettingCommand>
   {
-    internal RemoveSettingCommandHandler(ISettingRepository settingRepository)
+    internal RemoveSettingCommandHandler(
+      ISettingRepository settingRepository)
       : base(settingRepository)
     {
     }
 
+    public override CommandResult Handle(
+      RemoveSettingCommand command,
+      CancellationToken cancellationToken)
+    {
+      SettingRoot item = (SettingRoot)command.Item;
+
+      _repository.RemoveAsync(item.Id).Wait(cancellationToken);
+
+      return new CommandResult(item.Id);
+    }
+
     public override async Task<CommandResult> HandleAsync(
-      RemoveSettingCommand command)
+      RemoveSettingCommand command,
+      CancellationToken cancellationToken)
     {
       SettingRoot item = (SettingRoot)command.Item;
 

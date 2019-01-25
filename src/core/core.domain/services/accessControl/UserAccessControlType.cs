@@ -3,7 +3,7 @@
 namespace core.domain.services.accessControl
 {
   [Flags]
-  public enum AccessControlType
+  public enum UserAccessControlType
   {
     Role = 1,
     Owner = 2,

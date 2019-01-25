@@ -6,10 +6,8 @@ namespace sts.domain.model.settings
 {
   public sealed class SettingRoot : AggregateRoot
   {
-
-
-    internal SettingRoot(string id, string owner, object values, uint version = 0)
-    : base(id, owner, null, version)
+    public SettingRoot(string id, string owner, object values, uint version = 0)
+      : base(id, owner, null, version)
     {
       Values = values;
 
@@ -19,15 +17,7 @@ namespace sts.domain.model.settings
       }
     }
 
-
-
-
-
     public object Values { get; private set; }
-
-
-
-    #region Internal Methods
 
     internal void ChangeValues(object values)
     {
@@ -35,7 +25,5 @@ namespace sts.domain.model.settings
 
       AddEvent(new SettingChangedEvent(Id.ToString(), values, DateTime.Now));
     }
-
-    #endregion Internal Methods
   }
 }

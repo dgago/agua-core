@@ -3,6 +3,7 @@ using sts.domain.data;
 using sts.domain.model.settings;
 using core.domain.app;
 using core.domain.services;
+using System.Threading;
 
 namespace sts.domain.app.commands
 {
@@ -30,8 +31,23 @@ namespace sts.domain.app.commands
     {
     }
 
+    public override CommandResult Handle(
+      CreateSettingCommand command,
+      CancellationToken cancellationToken)
+    {
+      SettingRoot item = new SettingRoot(
+        command.Id,
+        command.Username,
+        command.Values);
+
+      string id = _repository.Create(item);
+
+      return new CommandResult(id);
+    }
+
     public override async Task<CommandResult> HandleAsync(
-      CreateSettingCommand command)
+      CreateSettingCommand command,
+      CancellationToken cancellationToken)
     {
       SettingRoot item = new SettingRoot(
         command.Id,
@@ -43,7 +59,6 @@ namespace sts.domain.app.commands
 
       return new CommandResult(id);
     }
-
   }
 
 }

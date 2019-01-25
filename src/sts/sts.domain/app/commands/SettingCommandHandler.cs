@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using sts.domain.data;
 using core.domain.app;
 using core.domain.services;
+using System.Threading;
+using core.domain.data;
 
 namespace sts.domain.app.commands
 {
@@ -10,7 +12,9 @@ namespace sts.domain.app.commands
     : ICommandHandler<TCommand>
     where TCommand : Command
   {
-    protected readonly ISettingRepository _repository;
+    protected ISettingRepository _repository { get; }
+
+    IRepository ICommandHandler<TCommand>.Repository => _repository;
 
     protected SettingCommandHandler(ISettingRepository settingRepository)
     {
@@ -18,6 +22,10 @@ namespace sts.domain.app.commands
         ?? throw new ArgumentNullException(nameof(settingRepository));
     }
 
-    public abstract Task<CommandResult> HandleAsync(TCommand command);
+    public abstract CommandResult Handle(TCommand command,
+      CancellationToken cancellationToken);
+
+    public abstract Task<CommandResult> HandleAsync(TCommand command,
+      CancellationToken cancellationToken);
   }
 }

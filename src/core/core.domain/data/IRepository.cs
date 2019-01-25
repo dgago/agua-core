@@ -5,8 +5,7 @@ namespace core.domain.data
 {
   public interface IRepository
   {
-
-    //string Create(IAggregateRoot item);
+    string Create(IAggregateRoot item);
 
     Task<string> CreateAsync(IAggregateRoot item);
 
@@ -22,9 +21,8 @@ namespace core.domain.data
 
     Task RemoveAsync(string id);
 
-    //bool Replace(string id, IAggregateRoot item);
+    bool Replace(string id, IAggregateRoot item);
 
     Task<bool> ReplaceAsync(string id, IAggregateRoot item);
-
   }
 }

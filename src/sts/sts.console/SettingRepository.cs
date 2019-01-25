@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using core.domain.model;
 using sts.domain.data;
+using sts.domain.model.settings;
 
 namespace sts.console
 {
@@ -19,7 +20,7 @@ namespace sts.console
 
     public IAggregateRoot FindOne(string id)
     {
-      throw new NotImplementedException();
+      return new SettingRoot("1", "me", new { a = 4 });
     }
 
     public Task<IAggregateRoot> FindOneAsync(string id)
@@ -49,7 +50,7 @@ namespace sts.console
 
     public bool Replace(string id, IAggregateRoot item)
     {
-      throw new NotImplementedException();
+      return true;
     }
 
     public Task<bool> ReplaceAsync(string id, IAggregateRoot item)

@@ -4,8 +4,6 @@ namespace core.domain.app
 {
   public interface IRolePrincipal : IPrincipal
   {
-
     string[] Roles { get; }
-
   }
 }

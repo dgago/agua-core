@@ -1,32 +1,47 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using core.domain.data;
 using core.domain.services;
 
 namespace core.domain.app
 {
   public class EventPublisherCommandHandler<TCommand> : ICommandHandler<TCommand>
-      where TCommand : ItemCommand
+    where TCommand : Command
   {
-
     private readonly IEventAdapter _eventAdapter;
 
     private readonly ICommandHandler<TCommand> _handler;
 
-    public EventPublisherCommandHandler(ICommandHandler<TCommand> handler,
-        IEventAdapter eventAdapter)
+    IRepository ICommandHandler<TCommand>.Repository => throw new NotImplementedException();
+
+    public EventPublisherCommandHandler(
+      IEventAdapter eventAdapter,
+      ICommandHandler<TCommand> handler)
     {
       _handler = handler;
       _eventAdapter = eventAdapter;
     }
 
-    public async Task<CommandResult> HandleAsync(TCommand command)
+    public CommandResult Handle(TCommand command,
+      CancellationToken cancellationToken)
     {
-      CommandResult res = await _handler.HandleAsync(command)
-          .ConfigureAwait(false);
+      CommandResult res = _handler.Handle(command, cancellationToken);
 
       _eventAdapter.Publish(command.Item.DomainEvents);
 
       return res;
     }
 
+    public async Task<CommandResult> HandleAsync(TCommand command,
+      CancellationToken cancellationToken)
+    {
+      CommandResult res = await _handler.HandleAsync(command,
+        cancellationToken).ConfigureAwait(false);
+
+      _eventAdapter.Publish(command.Item.DomainEvents);
+
+      return res;
+    }
   }
 }

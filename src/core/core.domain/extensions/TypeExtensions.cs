@@ -95,5 +95,20 @@ namespace core.domain.extensions
     //           mi => mi.GetParameters()[0].ParameterType,
     //           mi => ReflectionHelper.CompileMethodInvocation<Action<T, IAggregateEvent>>(type, "Apply", mi.GetParameters()[0].ParameterType));
     // }
+
+    public static TValue GetAttributeValue<TAttribute, TValue>(
+        this Type type,
+        Func<TAttribute, TValue> valueSelector)
+        where TAttribute : Attribute
+    {
+      var att = type.GetCustomAttributes(
+          typeof(TAttribute), true
+      ).FirstOrDefault() as TAttribute;
+      if (att != null)
+      {
+        return valueSelector(att);
+      }
+      return default(TValue);
+    }
   }
 }

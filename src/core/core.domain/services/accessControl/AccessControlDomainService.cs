@@ -5,22 +5,23 @@ using core.domain.extensions;
 
 namespace core.domain.services.accessControl
 {
-  // TODO: don't like this to be static
-  // TODO: should be a singleton, yes, but not static
   public class AccessControlDomainService : DomainService
   {
+    public readonly Dictionary<string, AccessControlRule> _rules;
 
-    // TODO: restrict access to this rules
-    public static Dictionary<string, AccessControlRule> _rules;
+    public AccessControlDomainService(IAccessControlConfigDomainService config)
+    {
+      this._rules = config.GetRules();
+    }
 
-    public static bool HasAccess(string resource, string username, string[] roles, IAggregateRoot item)
+    public bool HasAccess(string resource, string username, string[] roles, IAggregateRoot item)
     {
       AccessControlRule rule = _rules[resource];
 
       return HasAccess(rule, username, roles, item);
     }
 
-    public static bool HasAccess(string resource, string client)
+    public bool HasAccess(string resource, string client)
     {
       AccessControlRule rule = _rules[resource];
 
@@ -29,17 +30,17 @@ namespace core.domain.services.accessControl
 
     private static bool AcceptsOwner(AccessControlRule rule)
     {
-      return (rule.Type & AccessControlType.Owner) != 0;
+      return (rule.Type & UserAccessControlType.Owner) != 0;
     }
 
     private static bool AcceptsRoleList(AccessControlRule rule)
     {
-      return (rule.Type & AccessControlType.Role) != 0;
+      return (rule.Type & UserAccessControlType.Role) != 0;
     }
 
     private static bool AcceptsSharedList(AccessControlRule rule)
     {
-      return (rule.Type & AccessControlType.SharedList) != 0;
+      return (rule.Type & UserAccessControlType.SharedList) != 0;
     }
 
     private static bool HasAccess(
