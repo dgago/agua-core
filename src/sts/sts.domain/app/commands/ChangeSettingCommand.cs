@@ -10,6 +10,7 @@ using core.domain.data;
 
 namespace sts.domain.app.commands
 {
+  [CommandConfig(AuthorizationType.Client, CommandBehavior.Record)]
   public class ChangeSettingCommand : Command
   {
     public ChangeSettingCommand(string id, object values) : base(id)

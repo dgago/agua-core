@@ -7,19 +7,15 @@ using System.Threading;
 
 namespace sts.domain.app.commands
 {
+  [CommandConfig(AuthorizationType.Client, CommandBehavior.Action)]
   public class CreateSettingCommand : Command
   {
-
-    public CreateSettingCommand(string id, object values)
+    public CreateSettingCommand(string id, object values) : base(id)
     {
-      Id = id;
       Values = values;
     }
 
-    public string Id { get; set; }
-
     public object Values { get; set; }
-
   }
 
   public class CreateSettingCommandHandler
@@ -60,5 +56,4 @@ namespace sts.domain.app.commands
       return new CommandResult(id);
     }
   }
-
 }

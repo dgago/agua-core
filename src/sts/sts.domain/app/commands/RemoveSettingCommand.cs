@@ -7,6 +7,7 @@ using sts.domain.model.settings;
 
 namespace sts.domain.app.commands
 {
+  [CommandConfig(AuthorizationType.Client, CommandBehavior.Record)]
   public class RemoveSettingCommand : Command
   {
     public RemoveSettingCommand(string id, object values) : base(id)
