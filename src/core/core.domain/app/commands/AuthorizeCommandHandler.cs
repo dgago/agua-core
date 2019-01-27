@@ -8,21 +8,24 @@ using core.domain.services;
 using core.domain.services.accessControl;
 using core.domain.services.log;
 
-namespace core.domain.app
+namespace core.domain.app.commands
 {
   public class AuthorizeCommandHandler<TCommand> : ICommandHandler<TCommand>
-      where TCommand : Command
+    where TCommand : Command
   {
     private readonly AccessControlDomainService _accessControl;
+    private readonly IAuthorizationContext _context;
     private readonly ILogAdapter _logger;
     private readonly ICommandHandler<TCommand> _handler;
 
     public AuthorizeCommandHandler(
       AccessControlDomainService accessControl,
+      IAuthorizationContext context,
       ILogAdapter logAdapter,
       ICommandHandler<TCommand> handler)
     {
       _accessControl = accessControl;
+      _context = context;
       _logger = logAdapter;
       _handler = handler;
     }
@@ -69,10 +72,10 @@ namespace core.domain.app
       {
         // Audit log
         _logger.Warning("Unauthorized",
-          command.Client,
           command.ResourceName,
-          command.Username,
-          command.UserRoles,
+          _context.Client,
+          _context.Username,
+          _context.UserRoles,
           command.Item);
 
         throw new UnauthorizedAccessException(command.ResourceName);
@@ -90,13 +93,13 @@ namespace core.domain.app
         case AuthorizationType.Client:
           hasAccess = _accessControl.HasAccess(
             command.ResourceName,
-            command.Client);
+            _context.Client);
           break;
         case AuthorizationType.User:
           hasAccess = _accessControl.HasAccess(
             command.ResourceName,
-            command.Username,
-            command.UserRoles,
+            _context.Username,
+            _context.UserRoles,
             command.Item);
           break;
       }

@@ -9,7 +9,7 @@ namespace core.domain.services.accessControl
   {
     public readonly Dictionary<string, AccessControlRule> _rules;
 
-    public AccessControlDomainService(IAccessControlConfigDomainService config)
+    public AccessControlDomainService(IAccessControlConfig config)
     {
       this._rules = config.GetRules();
     }
@@ -126,6 +126,5 @@ namespace core.domain.services.accessControl
     {
       return rule.Clients.Contains(client);
     }
-
   }
 }

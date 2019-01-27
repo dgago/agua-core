@@ -4,7 +4,6 @@ namespace core.domain.model
 {
   public abstract class Entity : IEntity
   {
-
     public Entity(string id, uint version = 0)
     {
       if (id == null)
@@ -63,10 +62,5 @@ namespace core.domain.model
     {
       return (GetType().Name + Id).GetHashCode();
     }
-
-    // private Type GetRealType()
-    // {
-    //   return NHibernateProxyHelper.GetClassWithoutInitializingProxy(this);
-    // }
   }
 }

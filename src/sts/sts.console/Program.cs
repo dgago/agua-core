@@ -6,9 +6,11 @@ using core.domain.data;
 using core.domain.services;
 using core.domain.services.accessControl;
 using core.domain.services.log;
+using core.domain.services.events;
 using Microsoft.Extensions.DependencyInjection;
 using sts.domain.app.commands;
 using sts.domain.data;
+using core.domain.app.commands;
 
 namespace sts.console
 {
@@ -21,10 +23,14 @@ namespace sts.console
       services = new ServiceCollection()
         .AddLogging()
         .AddSingleton<ILogAdapter, ConsoleLogAdapter>()
-        .AddSingleton<ISettingRepository, SettingRepository>()
-        .AddSingleton<IAccessControlConfigDomainService, HardCodedAccessControlConfigDomainService>()
+        .AddSingleton<IEventAdapter, ConsoleEventAdapter>()
+        .AddSingleton<ISettingRepository, ConsoleSettingRepository>()
+        .AddSingleton<IAccessControlConfig, ConsoleAccessControlConfig>()
         .AddSingleton<AccessControlDomainService>()
+        .AddSingleton<IAuthorizationContext>(x => new ConsoleAuthorizationContext("console"))
         .AddAuthorizedCommandHandler<ChangeSettingCommand, ChangeSettingCommandHandler>()
+        .AddAuthorizedCommandHandler<CreateSettingCommand, CreateSettingCommandHandler>()
+        .AddAuthorizedCommandHandler<RemoveSettingCommand, RemoveSettingCommandHandler>()
         .BuildServiceProvider();
     }
 
@@ -37,7 +43,6 @@ namespace sts.console
       ChangeSettingCommand command = new ChangeSettingCommand(
         id,
         new { a = 1 });
-      command.Client = "console";
 
       try
       {

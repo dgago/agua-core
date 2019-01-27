@@ -4,8 +4,7 @@ namespace core.domain.model
 {
   public abstract class AggregateRoot : Entity, IAggregateRoot
   {
-
-    private readonly List<DomainEvent> _domainEvents = new List<DomainEvent>();
+    private readonly List<IDomainEvent> _domainEvents = new List<IDomainEvent>();
 
     private readonly List<string> _sharedList = new List<string>();
 
@@ -20,7 +19,7 @@ namespace core.domain.model
       this._sharedList = sharedList ?? new List<string>();
     }
 
-    public virtual IReadOnlyList<DomainEvent> DomainEvents => _domainEvents;
+    public virtual IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents;
 
     public string Owner { get; }
 
@@ -33,10 +32,9 @@ namespace core.domain.model
       _domainEvents.Clear();
     }
 
-    protected void AddEvent(DomainEvent newEvent)
+    protected void AddEvent(IDomainEvent newEvent)
     {
       _domainEvents.Add(newEvent);
     }
-
   }
 }

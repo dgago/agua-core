@@ -6,7 +6,7 @@ using sts.domain.model.settings;
 
 namespace sts.console
 {
-  class SettingRepository : ISettingRepository
+  class ConsoleSettingRepository : ISettingRepository
   {
     public string Create(IAggregateRoot item)
     {
@@ -20,7 +20,7 @@ namespace sts.console
 
     public IAggregateRoot FindOne(string id)
     {
-      return new SettingRoot("1", "me", new { a = 4 });
+      return new SettingRoot("1", "me", new { a = 4 }, 1);
     }
 
     public Task<IAggregateRoot> FindOneAsync(string id)

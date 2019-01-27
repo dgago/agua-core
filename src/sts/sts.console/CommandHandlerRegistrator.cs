@@ -1,6 +1,8 @@
 using core.domain.app;
+using core.domain.app.commands;
 using core.domain.services.accessControl;
 using core.domain.services.log;
+using core.domain.services.events;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace sts.console
@@ -32,6 +34,7 @@ namespace sts.console
           x.GetService<IEventAdapter>(),
           new AuthorizeCommandHandler<TCommand>(
             x.GetService<AccessControlDomainService>(),
+            x.GetService<IAuthorizationContext>(),
             x.GetService<ILogAdapter>(),
             x.GetService<THandler>())
             )

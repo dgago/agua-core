@@ -3,8 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using core.domain.data;
 using core.domain.services;
+using core.domain.services.events;
 
-namespace core.domain.app
+namespace core.domain.app.commands
 {
   public class EventPublisherCommandHandler<TCommand> : ICommandHandler<TCommand>
     where TCommand : Command

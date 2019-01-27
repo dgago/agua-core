@@ -4,14 +4,12 @@ namespace core.domain.model
 {
   public interface IAggregateRoot : IEntity
   {
-
-    IReadOnlyList<DomainEvent> DomainEvents { get; }
+    IReadOnlyList<IDomainEvent> DomainEvents { get; }
 
     string Owner { get; }
 
     IReadOnlyList<string> SharedList { get; }
 
     void ClearEvents();
-
   }
 }

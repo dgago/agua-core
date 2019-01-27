@@ -4,6 +4,7 @@ using sts.domain.model.settings;
 using core.domain.app;
 using core.domain.services;
 using System.Threading;
+using core.domain.app.commands;
 
 namespace sts.domain.app.commands
 {
@@ -21,10 +22,14 @@ namespace sts.domain.app.commands
   public class CreateSettingCommandHandler
     : SettingCommandHandler<CreateSettingCommand>
   {
+    private readonly IAuthorizationContext _context;
 
-    internal CreateSettingCommandHandler(ISettingRepository settingRepository)
+    internal CreateSettingCommandHandler(
+      ISettingRepository settingRepository,
+      IAuthorizationContext context)
       : base(settingRepository)
     {
+      _context = context;
     }
 
     public override CommandResult Handle(
@@ -33,7 +38,7 @@ namespace sts.domain.app.commands
     {
       SettingRoot item = new SettingRoot(
         command.Id,
-        command.Username,
+        _context.Username,
         command.Values);
 
       string id = _repository.Create(item);
@@ -47,7 +52,7 @@ namespace sts.domain.app.commands
     {
       SettingRoot item = new SettingRoot(
         command.Id,
-        command.Username,
+        _context.Username,
         command.Values);
 
       string id = await _repository.CreateAsync(item)
