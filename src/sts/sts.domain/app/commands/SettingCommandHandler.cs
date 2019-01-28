@@ -5,6 +5,7 @@ using core.domain.app;
 using core.domain.services;
 using System.Threading;
 using core.domain.data;
+using sts.domain.model.settings;
 
 namespace sts.domain.app.commands
 {
@@ -13,8 +14,6 @@ namespace sts.domain.app.commands
     where TCommand : Command
   {
     protected ISettingRepository _repository { get; }
-
-    IRepository ICommandHandler<TCommand>.Repository => _repository;
 
     protected SettingCommandHandler(ISettingRepository settingRepository)
     {

@@ -6,26 +6,28 @@ using sts.domain.model.settings;
 
 namespace sts.console
 {
-  class ConsoleSettingRepository : ISettingRepository
+  public class ConsoleSettingRepository : ISettingRepository
   {
-    public string Create(IAggregateRoot item)
+    public string Create(SettingRoot item)
     {
-      throw new NotImplementedException();
+      return "1";
     }
 
-    public Task<string> CreateAsync(IAggregateRoot item)
+    public Task<string> CreateAsync(SettingRoot item)
     {
-      throw new NotImplementedException();
+      return Task.FromResult("1");
     }
 
-    public IAggregateRoot FindOne(string id)
+    public SettingRoot FindOne(string id)
     {
       return new SettingRoot("1", "me", new { a = 4 }, 1);
     }
 
-    public Task<IAggregateRoot> FindOneAsync(string id)
+    public Task<SettingRoot> FindOneAsync(string id)
     {
-      throw new NotImplementedException();
+      return Task.FromResult(
+        (SettingRoot)new SettingRoot("1", "me", new { a = 4 }, 1)
+      );
     }
 
     public IEntity FindOneData(string id)
@@ -48,14 +50,14 @@ namespace sts.console
       throw new NotImplementedException();
     }
 
-    public bool Replace(string id, IAggregateRoot item)
+    public bool Replace(string id, SettingRoot item)
     {
       return true;
     }
 
-    public Task<bool> ReplaceAsync(string id, IAggregateRoot item)
+    public Task<bool> ReplaceAsync(string id, SettingRoot item)
     {
-      throw new NotImplementedException();
+      return Task.FromResult(true);
     }
   }
 }

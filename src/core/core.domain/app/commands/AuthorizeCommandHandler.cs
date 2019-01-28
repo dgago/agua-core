@@ -10,27 +10,30 @@ using core.domain.services.log;
 
 namespace core.domain.app.commands
 {
-  public class AuthorizeCommandHandler<TCommand> : ICommandHandler<TCommand>
+  public class AuthorizeCommandHandler<TCommand, TRoot> : ICommandHandler<TCommand>
     where TCommand : Command
+    where TRoot : AggregateRoot
   {
     private readonly AccessControlDomainService _accessControl;
     private readonly IAuthorizationContext _context;
     private readonly ILogAdapter _logger;
+    private readonly IRepository<TRoot> _repository;
     private readonly ICommandHandler<TCommand> _handler;
 
     public AuthorizeCommandHandler(
       AccessControlDomainService accessControl,
       IAuthorizationContext context,
       ILogAdapter logAdapter,
+      IRepository<TRoot> repository,
       ICommandHandler<TCommand> handler)
     {
+      // TODO: null control?
       _accessControl = accessControl;
       _context = context;
       _logger = logAdapter;
+      _repository = repository;
       _handler = handler;
     }
-
-    IRepository ICommandHandler<TCommand>.Repository => throw new NotImplementedException();
 
     public CommandResult Handle(TCommand command,
       CancellationToken cancellationToken)
@@ -62,7 +65,7 @@ namespace core.domain.app.commands
       IAggregateRoot item = null;
       if (behavior == CommandBehavior.Record)
       {
-        item = _handler.Repository?.FindOne(command.Id);
+        item = _repository?.FindOne(command.Id);
         item.Exists(item.GetType().Name, command.Id);
         command.Item = item;
       }

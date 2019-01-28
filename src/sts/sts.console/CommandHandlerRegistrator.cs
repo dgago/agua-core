@@ -4,15 +4,18 @@ using core.domain.services.accessControl;
 using core.domain.services.log;
 using core.domain.services.events;
 using Microsoft.Extensions.DependencyInjection;
+using core.domain.model;
+using core.domain.data;
 
 namespace sts.console
 {
   public static class CommandHandlerRegistrator
   {
-    public static IServiceCollection AddAuthorizedCommandHandler<TCommand, THandler>(
+    public static IServiceCollection AddAuthorizedCommandHandler<TCommand, THandler, TRoot>(
         this IServiceCollection services)
         where TCommand : Command
         where THandler : class, ICommandHandler<TCommand>
+        where TRoot : AggregateRoot
     {
       // adds an instance of THandler to the container
       services.AddScoped<THandler>();
@@ -32,10 +35,11 @@ namespace sts.console
       services.AddScoped<ICommandHandler<TCommand>>(x =>
         new EventPublisherCommandHandler<TCommand>(
           x.GetService<IEventAdapter>(),
-          new AuthorizeCommandHandler<TCommand>(
+          new AuthorizeCommandHandler<TCommand, TRoot>(
             x.GetService<AccessControlDomainService>(),
             x.GetService<IAuthorizationContext>(),
             x.GetService<ILogAdapter>(),
+            x.GetService<IRepository<TRoot>>(),
             x.GetService<THandler>())
             )
           );

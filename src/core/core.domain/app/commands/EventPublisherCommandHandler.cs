@@ -2,19 +2,19 @@
 using System.Threading;
 using System.Threading.Tasks;
 using core.domain.data;
+using core.domain.model;
 using core.domain.services;
 using core.domain.services.events;
 
 namespace core.domain.app.commands
 {
-  public class EventPublisherCommandHandler<TCommand> : ICommandHandler<TCommand>
+  public class EventPublisherCommandHandler<TCommand>
+    : ICommandHandler<TCommand>
     where TCommand : Command
   {
     private readonly IEventAdapter _eventAdapter;
 
     private readonly ICommandHandler<TCommand> _handler;
-
-    IRepository ICommandHandler<TCommand>.Repository => throw new NotImplementedException();
 
     public EventPublisherCommandHandler(
       IEventAdapter eventAdapter,

@@ -4,26 +4,26 @@ using core.domain.model;
 
 namespace core.domain.data
 {
-  public abstract class Repository<TRoot> : IRepository
+  public abstract class Repository<TRoot> : IRepository<TRoot>
+    where TRoot : AggregateRoot
   {
-
-    protected Mapper<IAggregateRoot, IEntity> Mapper { get; }
+    protected Mapper<TRoot, IEntity> Mapper { get; }
 
     protected IStore<IEntity, string> Store { get; }
 
-    public virtual string Create(IAggregateRoot item)
+    public virtual string Create(TRoot item)
     {
       IEntity ritem = Mapper.MapToData(item);
       return Store.Create(ritem);
     }
 
-    public virtual Task<string> CreateAsync(IAggregateRoot item)
+    public virtual Task<string> CreateAsync(TRoot item)
     {
       IEntity ritem = Mapper.MapToData(item);
       return Store.CreateAsync(ritem);
     }
 
-    public virtual IAggregateRoot FindOne(string id)
+    public virtual TRoot FindOne(string id)
     {
       IEntity item = Store.FindOne(id);
       if (item == null)
@@ -34,7 +34,7 @@ namespace core.domain.data
       return Mapper.MapToDomain(item);
     }
 
-    public virtual async Task<IAggregateRoot> FindOneAsync(string id)
+    public virtual async Task<TRoot> FindOneAsync(string id)
     {
       IEntity item = await Store.FindOneAsync(id).ConfigureAwait(false);
       if (item == null)
@@ -77,7 +77,7 @@ namespace core.domain.data
       Store.Remove(id);
     }
 
-    public virtual bool Replace(string id, IAggregateRoot item)
+    public virtual bool Replace(string id, TRoot item)
     {
       IEntity ditem = GetItem(id);
 
@@ -87,7 +87,7 @@ namespace core.domain.data
       return Store.Replace(id, ritem);
     }
 
-    public virtual async Task<bool> ReplaceAsync(string id, IAggregateRoot item)
+    public virtual async Task<bool> ReplaceAsync(string id, TRoot item)
     {
       IEntity ditem = await GetItemAsync(id);
 
@@ -97,9 +97,7 @@ namespace core.domain.data
       return await Store.ReplaceAsync(id, ritem).ConfigureAwait(false);
     }
 
-    #region Private Methods
-
-    private static void ValidateItemVersion(IAggregateRoot item, IEntity ditem)
+    private static void ValidateItemVersion(TRoot item, IEntity ditem)
     {
       if (ditem.Version > item.Version)
       {
@@ -128,8 +126,5 @@ namespace core.domain.data
 
       return ditem;
     }
-
-    #endregion Private Methods
-
   }
 }

@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\sts.domain\sts.domain.csproj" />
     <ProjectReference Include="..\..\core\core.domain\core.domain.csproj" />
+    <ProjectReference Include="..\sts.data\sts.data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

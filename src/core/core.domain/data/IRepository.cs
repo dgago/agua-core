@@ -3,15 +3,16 @@ using core.domain.model;
 
 namespace core.domain.data
 {
-  public interface IRepository
+  public interface IRepository<TRoot>
+    where TRoot : IAggregateRoot
   {
-    string Create(IAggregateRoot item);
+    string Create(TRoot item);
 
-    Task<string> CreateAsync(IAggregateRoot item);
+    Task<string> CreateAsync(TRoot item);
 
-    IAggregateRoot FindOne(string id);
+    TRoot FindOne(string id);
 
-    Task<IAggregateRoot> FindOneAsync(string id);
+    Task<TRoot> FindOneAsync(string id);
 
     //IEntity FindOneData(string id);
 
@@ -21,8 +22,8 @@ namespace core.domain.data
 
     Task RemoveAsync(string id);
 
-    bool Replace(string id, IAggregateRoot item);
+    bool Replace(string id, TRoot item);
 
-    Task<bool> ReplaceAsync(string id, IAggregateRoot item);
+    Task<bool> ReplaceAsync(string id, TRoot item);
   }
 }

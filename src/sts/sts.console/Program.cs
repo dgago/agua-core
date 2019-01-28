@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using sts.domain.app.commands;
 using sts.domain.data;
 using core.domain.app.commands;
+using sts.domain.model.settings;
 
 namespace sts.console
 {
@@ -20,7 +21,7 @@ namespace sts.console
 
     static Program()
     {
-      services = new ServiceCollection()
+      IServiceCollection scoll = new ServiceCollection()
         .AddLogging()
         .AddSingleton<ILogAdapter, ConsoleLogAdapter>()
         .AddSingleton<IEventAdapter, ConsoleEventAdapter>()
@@ -28,10 +29,11 @@ namespace sts.console
         .AddSingleton<IAccessControlConfig, ConsoleAccessControlConfig>()
         .AddSingleton<AccessControlDomainService>()
         .AddSingleton<IAuthorizationContext>(x => new ConsoleAuthorizationContext("console"))
-        .AddAuthorizedCommandHandler<ChangeSettingCommand, ChangeSettingCommandHandler>()
-        .AddAuthorizedCommandHandler<CreateSettingCommand, CreateSettingCommandHandler>()
-        .AddAuthorizedCommandHandler<RemoveSettingCommand, RemoveSettingCommandHandler>()
-        .BuildServiceProvider();
+        .AddAuthorizedCommandHandler<ChangeSettingCommand, ChangeSettingCommandHandler, SettingRoot>()
+        .AddAuthorizedCommandHandler<CreateSettingCommand, CreateSettingCommandHandler, SettingRoot>()
+        .AddAuthorizedCommandHandler<RemoveSettingCommand, RemoveSettingCommandHandler, SettingRoot>();
+
+      services = scoll.BuildServiceProvider();
     }
 
     static void Main(string[] args)
