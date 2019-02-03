@@ -16,10 +16,10 @@ namespace sts.console
       this.UserRoles = userRoles;
     }
 
-    public string Client { get; set; }
+    public string Client { get; }
 
-    public string Username { get; set; }
+    public string Username { get; }
 
-    public string[] UserRoles { get; set; }
+    public string[] UserRoles { get; }
   }
 }

@@ -2,10 +2,10 @@ namespace core.domain.app.commands
 {
   public interface IAuthorizationContext
   {
-    string Client { get; set; }
+    string Client { get; }
 
-    string Username { get; set; }
+    string Username { get; }
 
-    string[] UserRoles { get; set; }
+    string[] UserRoles { get; }
   }
 }

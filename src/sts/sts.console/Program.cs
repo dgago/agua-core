@@ -10,6 +10,7 @@ using core.domain.services.events;
 using Microsoft.Extensions.DependencyInjection;
 using sts.domain.app.commands;
 using sts.domain.data;
+using sts.data;
 using core.domain.app.commands;
 using sts.domain.model.settings;
 

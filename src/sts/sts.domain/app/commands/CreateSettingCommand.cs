@@ -24,7 +24,7 @@ namespace sts.domain.app.commands
   {
     private readonly IAuthorizationContext _context;
 
-    internal CreateSettingCommandHandler(
+    public CreateSettingCommandHandler(
       ISettingRepository settingRepository,
       IAuthorizationContext context)
       : base(settingRepository)

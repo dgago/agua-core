@@ -4,7 +4,7 @@ using core.domain.model;
 using sts.domain.data;
 using sts.domain.model.settings;
 
-namespace sts.console
+namespace sts.data
 {
   public class ConsoleSettingRepository : ISettingRepository
   {
