@@ -5,18 +5,13 @@ namespace sts.api
 {
   internal class ApiAuthorizationContext : IAuthorizationContext
   {
-    internal ApiAuthorizationContext(string client)
+    internal ApiAuthorizationContext(IHttpContextAccessor context)
     {
-      this.Client = client;
-    }
-
-    internal ApiAuthorizationContext(string client, HttpContext context)
-    {
-      this.Client = client;
+      this.Client = "sts-api";
       this._context = context;
     }
 
-    private readonly HttpContext _context;
+    private readonly IHttpContextAccessor _context;
 
     public string Client { get; }
 
@@ -24,7 +19,7 @@ namespace sts.api
     {
       get
       {
-        return this._context.User.Identity.Name;
+        return this._context.HttpContext.User.Identity.Name;
       }
     }
 

@@ -1,4 +1,5 @@
 using System.Threading;
+using System.Threading.Tasks;
 using core.domain.app;
 using Microsoft.AspNetCore.Mvc;
 using sts.domain.app.commands;
@@ -23,11 +24,12 @@ namespace sts.api.Controllers
 
     // POST api/settings
     [HttpPost]
-    public IActionResult Post([FromBody] Setting setting)
+    public async Task<IActionResult> PostAsync([FromBody] Setting setting)
     {
-      CreateSettingCommand command = new CreateSettingCommand(null,
+      CreateSettingCommand command = new CreateSettingCommand(
+        null,
         setting.Values);
-      var id = this._createSetting.Handle(command, new CancellationToken());
+      var id = await this._createSetting.HandleAsync(command, new CancellationToken());
       return Ok(id);
     }
   }

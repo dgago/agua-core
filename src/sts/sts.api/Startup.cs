@@ -23,6 +23,7 @@ using sts.domain.data;
 using sts.data;
 using core.domain.app.commands;
 using sts.domain.model.settings;
+using Microsoft.AspNetCore.Http;
 
 namespace sts.api
 {
@@ -46,7 +47,8 @@ namespace sts.api
         .AddSingleton<ISettingRepository, ConsoleSettingRepository>()
         .AddSingleton<IAccessControlConfig, ApiAccessControlConfig>()
         .AddSingleton<AccessControlDomainService>()
-        .AddSingleton<IAuthorizationContext>(x => new ApiAuthorizationContext("sts-api"))
+        .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
+        .AddScoped<IAuthorizationContext, ApiAuthorizationContext>()
         .AddAuthorizedCommandHandler<ChangeSettingCommand, ChangeSettingCommandHandler, SettingRoot>()
         .AddAuthorizedCommandHandler<CreateSettingCommand, CreateSettingCommandHandler, SettingRoot>()
         .AddAuthorizedCommandHandler<RemoveSettingCommand, RemoveSettingCommandHandler, SettingRoot>();
