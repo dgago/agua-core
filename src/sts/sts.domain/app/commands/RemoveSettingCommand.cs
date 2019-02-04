@@ -25,26 +25,24 @@ namespace sts.domain.app.commands
     }
 
     public override CommandResult Handle(
-      RemoveSettingCommand command,
-      CancellationToken cancellationToken)
+      RemoveSettingCommand command)
     {
       SettingRoot item = (SettingRoot)command.Item;
 
-      _repository.RemoveAsync(item.Id).Wait(cancellationToken);
+      _repository.RemoveAsync(item.Id).Wait(new CancellationToken());
 
-      return new CommandResult(item.Id);
+      return new CommandResult(item.Id, item.DomainEvents);
     }
 
     public override async Task<CommandResult> HandleAsync(
-      RemoveSettingCommand command,
-      CancellationToken cancellationToken)
+      RemoveSettingCommand command)
     {
       SettingRoot item = (SettingRoot)command.Item;
 
       await _repository.RemoveAsync(item.Id)
         .ConfigureAwait(false);
 
-      return new CommandResult(item.Id);
+      return new CommandResult(item.Id, item.DomainEvents);
     }
   }
 }

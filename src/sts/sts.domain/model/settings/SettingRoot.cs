@@ -13,7 +13,7 @@ namespace sts.domain.model.settings
 
       if (IsNew)
       {
-        AddEvent(new SettingCreatedEvent(id.ToString(), values, DateTime.Now));
+        AddEvent(new SettingCreatedEvent(id, values, DateTime.Now));
       }
     }
 
@@ -23,7 +23,7 @@ namespace sts.domain.model.settings
     {
       Values = values;
 
-      AddEvent(new SettingChangedEvent(Id.ToString(), values, DateTime.Now));
+      AddEvent(new SettingChangedEvent(Id, values, DateTime.Now));
     }
   }
 }

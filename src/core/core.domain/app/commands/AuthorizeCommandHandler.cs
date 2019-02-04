@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using core.domain.data;
 using core.domain.extensions;
@@ -7,7 +6,6 @@ using core.domain.model;
 using core.domain.services;
 using core.domain.services.accessControl;
 using core.domain.services.log;
-using Dawn;
 
 namespace core.domain.app.commands
 {
@@ -35,21 +33,18 @@ namespace core.domain.app.commands
       _handler = handler ?? throw new ArgumentNullException(nameof(handler));
     }
 
-    public CommandResult Handle(TCommand command,
-      CancellationToken cancellationToken)
+    public CommandResult Handle(TCommand command)
     {
       Authorize(command);
 
-      return _handler.Handle(command, cancellationToken);
+      return _handler.Handle(command);
     }
 
-    public async Task<CommandResult> HandleAsync(TCommand command,
-      CancellationToken cancellationToken)
+    public async Task<CommandResult> HandleAsync(TCommand command)
     {
       Authorize(command);
 
-      return await _handler.HandleAsync(command,
-        cancellationToken).ConfigureAwait(false);
+      return await _handler.HandleAsync(command).ConfigureAwait(false);
     }
 
     private void Authorize(TCommand command)

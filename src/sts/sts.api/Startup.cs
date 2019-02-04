@@ -1,33 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using System.Reflection;
-using System.Threading;
-using core.domain.app;
-using core.domain.data;
-using core.domain.services;
 using core.domain.services.accessControl;
 using core.domain.services.log;
 using core.domain.services.events;
 using sts.domain.app.commands;
-using sts.domain.data;
 using sts.data;
 using core.domain.app.commands;
 using sts.domain.model.settings;
 using Microsoft.AspNetCore.Http;
+using core.domain.data;
+using sts.domain.data;
 
 namespace sts.api
 {
-  public class Startup
+    public class Startup
   {
     public Startup(IConfiguration configuration)
     {
@@ -44,6 +33,7 @@ namespace sts.api
       services
         .AddSingleton<ILogAdapter, ConsoleLogAdapter>()
         .AddSingleton<IEventAdapter, ConsoleEventAdapter>()
+        .AddSingleton<IRepository<SettingRoot>, ConsoleSettingRepository>()
         .AddSingleton<ISettingRepository, ConsoleSettingRepository>()
         .AddSingleton<IAccessControlConfig, ApiAccessControlConfig>()
         .AddSingleton<AccessControlDomainService>()
@@ -68,12 +58,6 @@ namespace sts.api
       }
 
       app.UseHttpsRedirection();
-
-      // global exception handler
-      app.UseExceptionHandler(errorApp =>
-      {
-        // handle
-      });
 
       app.UseMvc();
     }

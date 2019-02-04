@@ -8,7 +8,7 @@ namespace sts.domain.model.settings.events
     internal SettingCreatedEvent(string id, object values, DateTime createdDate)
         : base(createdDate)
     {
-      Id = id ?? throw new ArgumentNullException(nameof(id));
+      Id = id; // ?? throw new ArgumentNullException(nameof(id));
       Values = values ?? throw new ArgumentNullException(nameof(values));
     }
 

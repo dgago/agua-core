@@ -5,7 +5,7 @@ namespace sts.api
 {
   internal class ApiAuthorizationContext : IAuthorizationContext
   {
-    internal ApiAuthorizationContext(IHttpContextAccessor context)
+    public ApiAuthorizationContext(IHttpContextAccessor context)
     {
       this.Client = "sts-api";
       this._context = context;

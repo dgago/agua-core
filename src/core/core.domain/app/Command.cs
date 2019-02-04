@@ -11,7 +11,7 @@ namespace core.domain.app
 
     public Command(string id)
     {
-      this.Id = id ?? throw new ArgumentNullException(nameof(id));
+      this.Id = id; // ?? throw new ArgumentNullException(nameof(id));
     }
 
     public virtual string ResourceName

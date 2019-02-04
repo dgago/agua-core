@@ -50,8 +50,7 @@ namespace sts.console
       try
       {
         CommandResult res = handler.Handle(
-          command,
-          new CancellationToken());
+          command);
       }
       catch (System.Exception ex)
       {

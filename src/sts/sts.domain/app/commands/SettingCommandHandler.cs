@@ -3,9 +3,6 @@ using System.Threading.Tasks;
 using sts.domain.data;
 using core.domain.app;
 using core.domain.services;
-using System.Threading;
-using core.domain.data;
-using sts.domain.model.settings;
 
 namespace sts.domain.app.commands
 {
@@ -21,10 +18,8 @@ namespace sts.domain.app.commands
         ?? throw new ArgumentNullException(nameof(settingRepository));
     }
 
-    public abstract CommandResult Handle(TCommand command,
-      CancellationToken cancellationToken);
+    public abstract CommandResult Handle(TCommand command);
 
-    public abstract Task<CommandResult> HandleAsync(TCommand command,
-      CancellationToken cancellationToken);
+    public abstract Task<CommandResult> HandleAsync(TCommand command);
   }
 }

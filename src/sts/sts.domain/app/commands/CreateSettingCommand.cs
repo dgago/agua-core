@@ -34,8 +34,7 @@ namespace sts.domain.app.commands
     }
 
     public override CommandResult Handle(
-      CreateSettingCommand command,
-      CancellationToken cancellationToken)
+      CreateSettingCommand command)
     {
       SettingRoot item = new SettingRoot(
         command.Id,
@@ -44,22 +43,21 @@ namespace sts.domain.app.commands
 
       string id = _repository.Create(item);
 
-      return new CommandResult(id);
+      return new CommandResult(id, item.DomainEvents);
     }
 
     public override async Task<CommandResult> HandleAsync(
-      CreateSettingCommand command,
-      CancellationToken cancellationToken)
+      CreateSettingCommand command)
     {
       SettingRoot item = new SettingRoot(
         command.Id,
-        _context.Username,
+        _context.Username ?? _context.Client,
         command.Values);
 
       string id = await _repository.CreateAsync(item)
         .ConfigureAwait(false);
 
-      return new CommandResult(id);
+      return new CommandResult(id, item.DomainEvents);
     }
   }
 }

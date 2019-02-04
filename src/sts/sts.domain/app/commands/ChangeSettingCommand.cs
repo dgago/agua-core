@@ -30,8 +30,7 @@ namespace sts.domain.app.commands
     {
     }
 
-    public override CommandResult Handle(ChangeSettingCommand command,
-      CancellationToken cancellationToken)
+    public override CommandResult Handle(ChangeSettingCommand command)
     {
       SettingRoot item = (SettingRoot)command.Item;
 
@@ -41,12 +40,11 @@ namespace sts.domain.app.commands
 
       _repository.Replace(command.Id, item);
 
-      return new CommandResult(item.Id);
+      return new CommandResult(item.Id, item.DomainEvents);
     }
 
     public override async Task<CommandResult> HandleAsync(
-      ChangeSettingCommand command,
-      CancellationToken cancellationToken)
+      ChangeSettingCommand command)
     {
       SettingRoot item = (SettingRoot)command.Item;
 
@@ -57,7 +55,7 @@ namespace sts.domain.app.commands
       await _repository.ReplaceAsync(command.Id, item)
         .ConfigureAwait(false);
 
-      return new CommandResult(item.Id);
+      return new CommandResult(item.Id, item.DomainEvents);
     }
   }
 }

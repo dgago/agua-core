@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
-using core.domain.data;
-using core.domain.model;
 using core.domain.services;
 using core.domain.services.events;
 
@@ -25,25 +22,24 @@ namespace core.domain.app.commands
         ?? throw new ArgumentNullException(nameof(eventAdapter));
     }
 
-    public CommandResult Handle(TCommand command,
-      CancellationToken cancellationToken)
+    public CommandResult Handle(TCommand command)
     {
-      CommandResult res = _handler.Handle(command, cancellationToken);
+      CommandResult res = _handler.Handle(command);
 
-      _eventAdapter.Publish(command.Item.DomainEvents);
+      _eventAdapter.Publish(res.DomainEvents);
 
       return res;
     }
 
-    public async Task<CommandResult> HandleAsync(TCommand command,
-      CancellationToken cancellationToken)
+    public async Task<CommandResult> HandleAsync(TCommand command)
     {
-      CommandResult res = await _handler.HandleAsync(command,
-        cancellationToken).ConfigureAwait(false);
+      CommandResult res = await _handler.HandleAsync(command)
+        .ConfigureAwait(false);
 
-      _eventAdapter.Publish(command.Item.DomainEvents);
+      _eventAdapter.Publish(res.DomainEvents);
 
-      return res;
+      // TODO: should we return the events !!??!?!?!?
+      return new CommandResult(res.Id, null, res.Message);
     }
   }
 }

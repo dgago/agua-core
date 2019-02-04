@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using core.domain.app;
+using core.domain.services;
 using Microsoft.AspNetCore.Mvc;
 using sts.domain.app.commands;
 
@@ -18,26 +19,20 @@ namespace sts.api.Controllers
       ICommandHandler<ChangeSettingCommand> changeSettingCommand
       )
     {
-      this._createSetting = createSettingCommand;
-      this._changeSetting = changeSettingCommand;
+      _createSetting = createSettingCommand;
+      _changeSetting = changeSettingCommand;
     }
 
     // POST api/settings
     [HttpPost]
-    public async Task<IActionResult> PostAsync([FromBody] Setting setting)
+    public async Task<IActionResult> PostAsync([FromBody] SettingModel setting)
     {
       CreateSettingCommand command = new CreateSettingCommand(
         null,
         setting.Values);
-      var id = await this._createSetting.HandleAsync(command, new CancellationToken());
-      return Ok(id);
+      CommandResult res = await _createSetting.HandleAsync(
+        command).ConfigureAwait(false);
+      return Ok(res.Id);
     }
-  }
-
-  public class Setting
-  {
-    public string Id { get; set; }
-
-    public string Values { get; set; }
   }
 }
