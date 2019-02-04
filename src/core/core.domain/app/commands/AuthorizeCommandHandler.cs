@@ -7,6 +7,7 @@ using core.domain.model;
 using core.domain.services;
 using core.domain.services.accessControl;
 using core.domain.services.log;
+using Dawn;
 
 namespace core.domain.app.commands
 {
@@ -27,12 +28,11 @@ namespace core.domain.app.commands
       IRepository<TRoot> repository,
       ICommandHandler<TCommand> handler)
     {
-      // TODO: null control?
-      _accessControl = accessControl;
-      _context = context;
-      _logger = logAdapter;
-      _repository = repository;
-      _handler = handler;
+      _accessControl = accessControl ?? throw new ArgumentNullException(nameof(accessControl));
+      _context = context ?? throw new ArgumentNullException(nameof(context));
+      _logger = logAdapter ?? throw new ArgumentNullException(nameof(logAdapter));
+      _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+      _handler = handler ?? throw new ArgumentNullException(nameof(handler));
     }
 
     public CommandResult Handle(TCommand command,

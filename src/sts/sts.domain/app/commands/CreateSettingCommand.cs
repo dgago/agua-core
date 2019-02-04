@@ -5,6 +5,7 @@ using core.domain.app;
 using core.domain.services;
 using System.Threading;
 using core.domain.app.commands;
+using System;
 
 namespace sts.domain.app.commands
 {
@@ -29,7 +30,7 @@ namespace sts.domain.app.commands
       IAuthorizationContext context)
       : base(settingRepository)
     {
-      _context = context;
+      _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     public override CommandResult Handle(

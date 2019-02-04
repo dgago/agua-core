@@ -5,23 +5,15 @@ namespace sts.domain.model.settings.events
 {
   internal class SettingChangedEvent : DomainEvent
   {
-
-
     internal SettingChangedEvent(string id, object values, DateTime createdDate)
         : base(createdDate)
     {
-      Id = id;
-      Values = values;
+      Id = id ?? throw new ArgumentNullException(nameof(id));
+      Values = values ?? throw new ArgumentNullException(nameof(values));
     }
-
-
-
-
 
     public string Id { get; }
 
     public object Values { get; }
-
-
   }
 }

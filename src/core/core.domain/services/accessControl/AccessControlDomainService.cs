@@ -2,6 +2,7 @@
 using core.domain.model;
 using System.Linq;
 using core.domain.extensions;
+using System;
 
 namespace core.domain.services.accessControl
 {
@@ -11,6 +12,11 @@ namespace core.domain.services.accessControl
 
     public AccessControlDomainService(IAccessControlConfig config)
     {
+      if (config == null)
+      {
+        throw new ArgumentNullException(nameof(config));
+      }
+
       this._rules = config.GetRules();
     }
 

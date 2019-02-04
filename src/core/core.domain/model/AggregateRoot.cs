@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace core.domain.model
@@ -15,7 +16,7 @@ namespace core.domain.model
       uint version = 0)
       : base(id, version)
     {
-      this.Owner = owner;
+      this.Owner = owner ?? throw new ArgumentNullException(nameof(owner));
       this._sharedList = sharedList ?? new List<string>();
     }
 

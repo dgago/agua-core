@@ -2,7 +2,6 @@ namespace core.domain.services
 {
   public class CommandResult
   {
-
     public CommandResult(string id, string message)
     {
       Id = id;
@@ -17,6 +16,5 @@ namespace core.domain.services
     public string Id { get; }
 
     public string Message { get; }
-
   }
 }

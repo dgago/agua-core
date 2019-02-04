@@ -20,8 +20,9 @@ namespace core.domain.app.commands
       IEventAdapter eventAdapter,
       ICommandHandler<TCommand> handler)
     {
-      _handler = handler;
-      _eventAdapter = eventAdapter;
+      _handler = handler ?? throw new ArgumentNullException(nameof(handler));
+      _eventAdapter = eventAdapter
+        ?? throw new ArgumentNullException(nameof(eventAdapter));
     }
 
     public CommandResult Handle(TCommand command,

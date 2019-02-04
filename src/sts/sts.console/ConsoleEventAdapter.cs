@@ -14,7 +14,8 @@ namespace sts.console
       foreach (var item in domainEvents)
       {
         string eventName = item.GetType().FullName;
-        Console.WriteLine($"Event {eventName} raised on {item.Date}. Data: {JsonConvert.SerializeObject(item)}");
+        Console.WriteLine($"Event {eventName} raised on {item.Date}. " +
+          "Data: {JsonConvert.SerializeObject(item)}");
       }
     }
   }

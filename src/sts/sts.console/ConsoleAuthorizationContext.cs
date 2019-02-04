@@ -1,3 +1,4 @@
+using System;
 using core.domain.app.commands;
 
 namespace sts.console
@@ -6,14 +7,14 @@ namespace sts.console
   {
     internal ConsoleAuthorizationContext(string client)
     {
-      this.Client = client;
+      this.Client = client ?? throw new ArgumentNullException(nameof(client));
     }
 
     internal ConsoleAuthorizationContext(string client, string username, string[] userRoles)
     {
-      this.Client = client;
-      this.Username = username;
-      this.UserRoles = userRoles;
+      this.Client = client ?? throw new ArgumentNullException(nameof(client));
+      this.Username = username ?? throw new ArgumentNullException(nameof(username));
+      this.UserRoles = userRoles ?? throw new ArgumentNullException(nameof(userRoles));
     }
 
     public string Client { get; }

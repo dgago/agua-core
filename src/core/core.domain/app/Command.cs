@@ -1,4 +1,5 @@
-﻿using core.domain.model;
+﻿using System;
+using core.domain.model;
 
 namespace core.domain.app
 {
@@ -10,7 +11,7 @@ namespace core.domain.app
 
     public Command(string id)
     {
-      this.Id = id;
+      this.Id = id ?? throw new ArgumentNullException(nameof(id));
     }
 
     public virtual string ResourceName
