@@ -12,7 +12,7 @@ namespace sts.domain.app.commands
   [CommandConfig(AuthorizationType.Client, CommandBehavior.Action)]
   public class CreateSettingCommand : Command
   {
-    public CreateSettingCommand(string id, object values) : base(id)
+    public CreateSettingCommand(object values) : base(null)
     {
       Values = values;
     }

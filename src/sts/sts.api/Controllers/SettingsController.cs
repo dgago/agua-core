@@ -7,6 +7,7 @@ using sts.domain.app.commands;
 
 namespace sts.api.Controllers
 {
+  [Produces("application/json")]
   [Route("api/[controller]")]
   [ApiController]
   public class SettingsController : ControllerBase
@@ -25,11 +26,11 @@ namespace sts.api.Controllers
 
     // POST api/settings
     [HttpPost]
+    [ProducesResponseType(201)]
+    [ProducesResponseType(400)]
     public async Task<IActionResult> PostAsync([FromBody] SettingModel setting)
     {
-      CreateSettingCommand command = new CreateSettingCommand(
-        null,
-        setting.Values);
+      CreateSettingCommand command = new CreateSettingCommand(setting.Values);
       CommandResult res = await _createSetting.HandleAsync(
         command).ConfigureAwait(false);
       return Ok(res.Id);
