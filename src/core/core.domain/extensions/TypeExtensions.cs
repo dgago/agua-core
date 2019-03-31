@@ -10,6 +10,30 @@ namespace core.domain.extensions
     private static readonly ConcurrentDictionary<Type, string> PrettyPrintCache =
         new ConcurrentDictionary<Type, string>();
 
+    private static readonly ConcurrentDictionary<Type, string> TypeCacheKeys = new ConcurrentDictionary<Type, string>();
+
+    public static TValue GetAttributeValue<TAttribute, TValue>(
+        this Type type,
+        Func<TAttribute, TValue> valueSelector)
+        where TAttribute : Attribute
+    {
+      var att = type.GetCustomAttributes(
+          typeof(TAttribute), true
+      ).FirstOrDefault() as TAttribute;
+      if (att != null)
+      {
+        return valueSelector(att);
+      }
+      return default(TValue);
+    }
+
+    public static string GetCacheKey(this Type type)
+    {
+      return TypeCacheKeys.GetOrAdd(
+          type,
+          t => $"{t.PrettyPrint()}[hash: {t.GetHashCode()}]");
+    }
+
     public static string PrettyPrint(this Type type)
     {
       return PrettyPrintCache.GetOrAdd(
@@ -26,15 +50,6 @@ namespace core.domain.extensions
             }
           });
     }
-
-    private static readonly ConcurrentDictionary<Type, string> TypeCacheKeys = new ConcurrentDictionary<Type, string>();
-    public static string GetCacheKey(this Type type)
-    {
-      return TypeCacheKeys.GetOrAdd(
-          type,
-          t => $"{t.PrettyPrint()}[hash: {t.GetHashCode()}]");
-    }
-
     private static string PrettyPrintRecursive(Type type, int depth)
     {
       if (depth > 3)
@@ -95,20 +110,5 @@ namespace core.domain.extensions
     //           mi => mi.GetParameters()[0].ParameterType,
     //           mi => ReflectionHelper.CompileMethodInvocation<Action<T, IAggregateEvent>>(type, "Apply", mi.GetParameters()[0].ParameterType));
     // }
-
-    public static TValue GetAttributeValue<TAttribute, TValue>(
-        this Type type,
-        Func<TAttribute, TValue> valueSelector)
-        where TAttribute : Attribute
-    {
-      var att = type.GetCustomAttributes(
-          typeof(TAttribute), true
-      ).FirstOrDefault() as TAttribute;
-      if (att != null)
-      {
-        return valueSelector(att);
-      }
-      return default(TValue);
-    }
   }
 }

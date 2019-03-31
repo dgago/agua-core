@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using sts.domain.data;
 using core.domain.app;
 using core.domain.services;
+using core.domain.extensions;
 
 namespace sts.domain.app.commands
 {
@@ -14,8 +14,7 @@ namespace sts.domain.app.commands
 
     protected SettingCommandHandler(ISettingRepository settingRepository)
     {
-      _repository = settingRepository
-        ?? throw new ArgumentNullException(nameof(settingRepository));
+      _repository = settingRepository.NotNull(nameof(settingRepository));
     }
 
     public abstract CommandResult Handle(TCommand command);

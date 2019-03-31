@@ -1,20 +1,24 @@
-using System;
+using core.domain.extensions;
 using core.domain.app.commands;
 
 namespace sts.console
 {
+  /// <summary>
+  /// Permite realizar tareas de ACL en los comandos.
+  /// Esta implementación es particular para una app de consola.
+  /// </summary>
   internal class ConsoleAuthorizationContext : IAuthorizationContext
   {
     internal ConsoleAuthorizationContext(string client)
     {
-      this.Client = client ?? throw new ArgumentNullException(nameof(client));
+      this.Client = client.NotNull(nameof(client));
     }
 
     internal ConsoleAuthorizationContext(string client, string username, string[] userRoles)
     {
-      this.Client = client ?? throw new ArgumentNullException(nameof(client));
-      this.Username = username ?? throw new ArgumentNullException(nameof(username));
-      this.UserRoles = userRoles ?? throw new ArgumentNullException(nameof(userRoles));
+      this.Client = client.NotNull(nameof(client));
+      this.Username = username.NotNull(nameof(username));
+      this.UserRoles = userRoles.NotNull(nameof(userRoles));
     }
 
     public string Client { get; }

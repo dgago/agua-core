@@ -1,4 +1,4 @@
-using Dawn;
+using core.domain.extensions;
 
 namespace core.domain.model
 {
@@ -8,11 +8,11 @@ namespace core.domain.model
     {
       if (id == null)
       {
-        Guard.Argument(version, nameof(version)).Zero();
+        Version = version.Zero(nameof(version));
       }
 
       Id = id;
-      Version = version;
+      Version = version.NotZero(nameof(version));
     }
 
     public virtual string Id { get; protected set; }
@@ -41,19 +41,27 @@ namespace core.domain.model
 
     public override bool Equals(object obj)
     {
-      var other = obj as Entity;
+      Entity other = obj as Entity;
 
       if (ReferenceEquals(other, null))
+      {
         return false;
+      }
 
       if (ReferenceEquals(this, other))
+      {
         return true;
+      }
 
       if (GetType() != other.GetType())
+      {
         return false;
+      }
 
       if (Id == null || other.Id == null)
+      {
         return false;
+      }
 
       return Id == other.Id;
     }

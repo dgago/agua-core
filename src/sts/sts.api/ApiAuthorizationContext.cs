@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Http;
 
 namespace sts.api
 {
+  /// <summary>
+  /// Permite realizar tareas de ACL en los comandos. Esta implementación
+  /// es particular para una API.
+  /// </summary>
   internal class ApiAuthorizationContext : IAuthorizationContext
   {
     public ApiAuthorizationContext(IHttpContextAccessor context)

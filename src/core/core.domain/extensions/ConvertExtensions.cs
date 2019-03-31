@@ -4,6 +4,30 @@ namespace core.domain.extensions
 {
   public static class ConvertExtensions
   {
+    public static bool ToBool(this object arg)
+    {
+      if (arg == null)
+      {
+        return false;
+      }
+
+      if (arg is bool)
+      {
+        return (bool)arg;
+      }
+
+      if (arg is int && (int)arg == 0)
+      {
+        return false;
+      }
+
+      if (arg is int && (int)arg == 1)
+      {
+        return true;
+      }
+
+      return Convert.ToBoolean(arg);
+    }
 
     public static DateTime ToDateTime(this object arg)
     {

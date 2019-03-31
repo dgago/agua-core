@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Dynamic;
 
@@ -6,6 +7,10 @@ namespace core.domain.extensions
 {
   public static class DataExtensions
   {
+    public static DateTime Now()
+    {
+      return DateTime.Now;
+    }
 
     public static List<dynamic> ToDynamic(this DataTable dt)
     {
@@ -23,6 +28,5 @@ namespace core.domain.extensions
       //return res;
       return null;
     }
-
   }
 }

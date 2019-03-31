@@ -12,10 +12,7 @@ namespace core.domain.services.accessControl
 
     public AccessControlDomainService(IAccessControlConfig config)
     {
-      if (config == null)
-      {
-        throw new ArgumentNullException(nameof(config));
-      }
+      config.NotNull(nameof(config));
 
       this._rules = config.GetRules();
     }

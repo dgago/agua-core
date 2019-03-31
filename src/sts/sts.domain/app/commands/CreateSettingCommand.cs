@@ -3,9 +3,8 @@ using sts.domain.data;
 using sts.domain.model.settings;
 using core.domain.app;
 using core.domain.services;
-using System.Threading;
 using core.domain.app.commands;
-using System;
+using core.domain.extensions;
 
 namespace sts.domain.app.commands
 {
@@ -30,7 +29,7 @@ namespace sts.domain.app.commands
       IAuthorizationContext context)
       : base(settingRepository)
     {
-      _context = context ?? throw new ArgumentNullException(nameof(context));
+      _context = context.NotNull(nameof(context));
     }
 
     public override CommandResult Handle(

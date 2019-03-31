@@ -4,9 +4,6 @@ using sts.domain.model.settings;
 using core.domain.app;
 using core.domain.extensions;
 using core.domain.services;
-using Dawn;
-using System.Threading;
-using core.domain.data;
 
 namespace sts.domain.app.commands
 {
@@ -34,7 +31,7 @@ namespace sts.domain.app.commands
     {
       SettingRoot item = (SettingRoot)command.Item;
 
-      Guard.Argument(item).NotNull(nameof(item));
+      item.NotNull(nameof(item));
 
       item.ChangeValues(command.Values);
 
@@ -48,7 +45,7 @@ namespace sts.domain.app.commands
     {
       SettingRoot item = (SettingRoot)command.Item;
 
-      Guard.Argument(item).NotNull(nameof(item));
+      item.NotNull(nameof(item));
 
       item.ChangeValues(command.Values);
 

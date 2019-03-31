@@ -1,4 +1,5 @@
 using System;
+using core.domain.extensions;
 using core.domain.model;
 
 namespace sts.domain.model.settings.events
@@ -9,7 +10,7 @@ namespace sts.domain.model.settings.events
         : base(createdDate)
     {
       Id = id; // ?? throw new ArgumentNullException(nameof(id));
-      Values = values ?? throw new ArgumentNullException(nameof(values));
+      Values = values.NotNull(nameof(values));
     }
 
     public string Id { get; }

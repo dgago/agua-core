@@ -9,11 +9,11 @@ namespace sts.domain.model.settings
     public SettingRoot(string id, string owner, object values, uint version = 0)
       : base(id, owner, null, version)
     {
-      Values = values;
+      this.Values = values;
 
-      if (IsNew)
+      if (this.IsNew)
       {
-        AddEvent(new SettingCreatedEvent(id, values, DateTime.Now));
+        this.AddEvent(new SettingCreatedEvent(id, values, DateTime.Now));
       }
     }
 
@@ -21,9 +21,14 @@ namespace sts.domain.model.settings
 
     internal void ChangeValues(object values)
     {
-      Values = values;
+      this.Values = values;
 
-      AddEvent(new SettingChangedEvent(Id, values, DateTime.Now));
+      this.AddEvent(new SettingChangedEvent(this.Id, values, DateTime.Now));
+    }
+
+    protected override TData ToData<TData>()
+    {
+      throw new NotImplementedException();
     }
   }
 }

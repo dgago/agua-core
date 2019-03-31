@@ -5,8 +5,4 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Dawn.Guard" Version="1.7.0" />
-  </ItemGroup>
-
 </Project>
