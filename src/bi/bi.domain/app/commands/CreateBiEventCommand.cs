@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using bi.domain.data;
 using bi.domain.model.bi_event;
 using bi.domain.services;
+
 using core.domain.app;
 using core.domain.app.commands;
 using core.domain.extensions;
@@ -10,9 +12,9 @@ using core.domain.services;
 
 namespace bi.domain.app.commands
 {
-  internal sealed class CreateBiEventCommand : Command
+  public sealed class CreateBiEventCommand : Command
   {
-    private CreateBiEventCommand(
+    public CreateBiEventCommand(
       string id,
       string name,
       string payload) : base(id)
@@ -21,11 +23,12 @@ namespace bi.domain.app.commands
       this.Payload = payload;
     }
 
-    public string Name { get;  }
-    public string Payload { get;  }
+    public string Name { get; }
+
+    public string Payload { get; }
   }
 
-  internal sealed class CreateBiEventCommandHandler
+  public sealed class CreateBiEventCommandHandler
     : BiEventCommandHandler<CreateBiEventCommand>
   {
     private readonly BiEventDomainService _bieventDs;
@@ -52,7 +55,7 @@ namespace bi.domain.app.commands
       // validates event consistency
       BiEventRoot item = new BiEventRoot(
         command.Id,
-        this._context.Username,
+        this._context.Username ?? this._context.Client,
         command.Name,
         parts);
 

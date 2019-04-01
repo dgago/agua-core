@@ -1,37 +1,40 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+
 using bi.domain.data;
 using bi.domain.model.bi_event;
+
 using core.domain.data;
-using Npgsql;
-using System.Linq;
 using core.domain.extensions;
+
+using Npgsql;
 
 namespace bi.data.pg
 {
   public class PgBiEventRepository : PgRepository<BiEventRoot>, IBiEventRepository
   {
-    public PgBiEventRepository(DbContext context) : base(context)
+    public PgBiEventRepository(IDbContext context) : base(context)
     {
     }
 
     public override string Create(BiEventRoot item)
     {
-      using (NpgsqlConnection conn = new NpgsqlConnection(
+      using(NpgsqlConnection conn = new NpgsqlConnection(
         this._context.ConnectionString))
       {
         conn.Open();
 
-        Dictionary<string, dynamic> payload = item.Payload;
-        foreach (KeyValuePair<string, dynamic> record in payload.Skip(1))
+        IDictionary<string, dynamic> payload = item.Payload;
+        foreach(KeyValuePair<string, dynamic> record in payload.Skip(1))
         {
           bool tableExists = this.TableExists(conn, record.Key);
           if(!tableExists)
           {
-            CreateTable(conn, record.Key, record.Value);
+            this.CreateTable(conn, record.Key, record.Value);
           }
 
           bool mustReplace = this.IfExistsMustReplace(record.Value);
-          if (mustReplace)
+          if(mustReplace)
           {
             RemoveRecord(conn, record.Key, record.Value);
           }
@@ -47,11 +50,10 @@ namespace bi.data.pg
     private void CreateTable(NpgsqlConnection conn, string name,
       IDictionary<string, object> values)
     {
-      using (NpgsqlCommand cmd = new NpgsqlCommand())
+      using(NpgsqlCommand cmd = new NpgsqlCommand())
       {
         cmd.Connection = conn;
-        cmd.CommandText = $@"CREATE TABLE bi.{name} (
-id int4 PRIMARY KEY,
+        cmd.CommandText = $@"CREATE TABLE bi.{name} (id int4 PRIMARY KEY,
 {this.GetColumnDefinitions(values)}
 );";
         cmd.ExecuteNonQuery();
@@ -78,7 +80,7 @@ id int4 PRIMARY KEY,
 
     private bool IfExistsMustReplace(IDictionary<string, object> values)
     {
-      if (values.ContainsKey("_replace"))
+      if(values.ContainsKey("_replace"))
       {
         return values["_replace"].ToBool();
       }
@@ -90,12 +92,12 @@ id int4 PRIMARY KEY,
       IDictionary<string, object> values)
     {
       string id = values["id"].ToString();
-      if (id.IsNows())
+      if(id.IsNows())
       {
         return;
       }
 
-      using (NpgsqlCommand cmd = new NpgsqlCommand())
+      using(NpgsqlCommand cmd = new NpgsqlCommand())
       {
         cmd.Connection = conn;
         cmd.CommandText = $"DELETE FROM {name} WHERE ID = '@id';";
@@ -107,7 +109,7 @@ id int4 PRIMARY KEY,
     private string SaveRecord(NpgsqlConnection conn, string name,
           IDictionary<string, object> values)
     {
-      using (NpgsqlCommand cmd = new NpgsqlCommand())
+      using(NpgsqlCommand cmd = new NpgsqlCommand())
       {
         cmd.Connection = conn;
 
@@ -117,7 +119,7 @@ id int4 PRIMARY KEY,
           $"VALUES(@{string.Join(",@", columnNames)}) " +
           $"ON CONFLICT DO NOTHING RETURNING ID;";
 
-        foreach (string columnName in columnNames)
+        foreach(string columnName in columnNames)
         {
           cmd.Parameters.AddWithValue(columnName, values[columnName]);
         }
@@ -130,12 +132,12 @@ id int4 PRIMARY KEY,
 
     private bool TableExists(NpgsqlConnection conn, string name)
     {
-      using (NpgsqlCommand cmd = new NpgsqlCommand())
+      using(NpgsqlCommand cmd = new NpgsqlCommand())
       {
         cmd.Connection = conn;
         cmd.CommandText = @"SELECT EXISTS (
 SELECT 1
-FROM   information_schema.tables 
+FROM   information_schema.tables
 WHERE  table_schema = 'bi'
 AND    table_name = '@name'
 );";

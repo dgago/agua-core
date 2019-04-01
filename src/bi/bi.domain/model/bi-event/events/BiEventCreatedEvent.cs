@@ -10,20 +10,17 @@ namespace bi.domain.model.bi_event
     internal BiEventCreatedEvent(
       string id,
       string name,
-      Dictionary<string, dynamic> payload,
-      //BiEventStatus status,
+      IDictionary<string, dynamic> payload,
       DateTime createdDate)
       : base(createdDate)
     {
-      this.Id = id.NotNull(nameof(id));
-      this.Name = name.NotNull(nameof(name));
-      this.Payload = payload.NotNull(nameof(payload));
-      //this.Status = status;
+      this.Id = id;
+      this.Name = name;
+      this.Payload = payload;
     }
 
     public string Id { get; }
     public string Name { get; }
-    public Dictionary<string, dynamic> Payload { get; }
-    //public BiEventStatus Status{ get; }
+    public IDictionary<string, dynamic> Payload { get; }
   }
 }

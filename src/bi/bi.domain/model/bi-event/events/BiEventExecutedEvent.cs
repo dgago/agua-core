@@ -16,7 +16,6 @@ namespace bi.domain.model.bi_event
     }
 
     public string Id { get; }
-
     public string Result { get; }
   }
 }

@@ -6,13 +6,16 @@ namespace core.domain.model
   {
     public Entity(string id, uint version = 0)
     {
-      if (id == null)
+      if(id == null)
       {
         Version = version.Zero(nameof(version));
       }
+      else
+      {
+        Version = version.NotZero(nameof(version));
+      }
 
       Id = id;
-      Version = version.NotZero(nameof(version));
     }
 
     public virtual string Id { get; protected set; }
@@ -26,12 +29,12 @@ namespace core.domain.model
 
     public static bool operator ==(Entity a, Entity b)
     {
-      if (ReferenceEquals(a, null) && ReferenceEquals(b, null))
+      if(ReferenceEquals(a, null) && ReferenceEquals(b, null))
       {
         return true;
       }
 
-      if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
+      if(ReferenceEquals(a, null) || ReferenceEquals(b, null))
       {
         return false;
       }
@@ -43,22 +46,22 @@ namespace core.domain.model
     {
       Entity other = obj as Entity;
 
-      if (ReferenceEquals(other, null))
+      if(ReferenceEquals(other, null))
       {
         return false;
       }
 
-      if (ReferenceEquals(this, other))
+      if(ReferenceEquals(this, other))
       {
         return true;
       }
 
-      if (GetType() != other.GetType())
+      if(GetType() != other.GetType())
       {
         return false;
       }
 
-      if (Id == null || other.Id == null)
+      if(Id == null || other.Id == null)
       {
         return false;
       }

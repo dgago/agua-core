@@ -4,9 +4,10 @@ using Newtonsoft.Json.Serialization;
 
 namespace bi.domain.services
 {
-  internal sealed class BiEventDomainService
+  public sealed class BiEventDomainService
   {
-    internal IDictionary<string, dynamic> ParsePayload(string name, string payload)
+    internal IDictionary<string, dynamic> ParsePayload(
+      string name, string payload)
     {
       // TODO: validate name against the catalog of valid facts
 
@@ -27,7 +28,8 @@ namespace bi.domain.services
 
       foreach (string key in root.Keys)
       {
-        if (root[key].GetType().ToString() == "object" ) {
+        if(root[key].GetType().ToString() == "Newtonsoft.Json.Linq.JObject")
+        {
           res.Add(key, root[key]);
         }
         else

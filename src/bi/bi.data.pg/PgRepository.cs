@@ -1,15 +1,16 @@
 ﻿using System.Threading.Tasks;
+
 using core.domain.data;
 using core.domain.model;
 
 namespace bi.data.pg
 {
-  public class PgRepository<TRoot> : IRepository<TRoot>
+  public abstract class PgRepository<TRoot> : IRepository<TRoot>
     where TRoot : IAggregateRoot
   {
-    protected readonly DbContext _context;
+    protected readonly IDbContext _context;
 
-    public PgRepository(DbContext context)
+    public PgRepository(IDbContext context)
     {
       this._context = context;
     }

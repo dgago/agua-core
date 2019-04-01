@@ -23,7 +23,7 @@ namespace bi.domain.model.bi_event
     {
       this.CreatedDate = DataExtensions.Now();
       this.Name = name.NotNull(nameof(name));
-      this.Payload = this.ValidatePayload( payload.NotNull(nameof(payload)) );
+      this.Payload = this.ValidatePayload(payload.NotNull(nameof(payload)));
       //this.Status = BiEventStatus.Created;
 
       if (this.IsNew)
@@ -42,16 +42,18 @@ namespace bi.domain.model.bi_event
 
     public string Name { get; }
 
-    public Dictionary<string, dynamic> Payload { get; }
+    public IDictionary<string, dynamic> Payload { get; }
 
     protected override TData ToData<TData>()
     {
       throw new NotImplementedException();
     }
 
-    private Dictionary<string, dynamic> ValidatePayload(IDictionary<string, dynamic> dictionary)
+    private IDictionary<string, dynamic> ValidatePayload(
+      IDictionary<string, dynamic> dictionary)
     {
-      throw new NotImplementedException();
+      // TODO: validar payload
+      return dictionary;
     }
 
     //public string Result { get; }

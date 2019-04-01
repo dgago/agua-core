@@ -1,0 +1,14 @@
+﻿{
+	"id": 112,
+	"count": 5,
+	"type": {
+		"id": 1,
+		"code": "T1",
+		"name": "Tipo 1",
+		"description": "Tipo 1"
+	},
+	"category": {
+		"id": 2,
+		"name": "C2"
+	}
+}
