@@ -25,7 +25,7 @@ namespace bi.console
 
     static Program()
     {
-      string connectionString = "";
+      const string connectionString = "Server=192.168.0.103;Port=5432;Database=postgres;User Id=postgres;Password=abc123;";
 
       IServiceCollection scoll = new ServiceCollection()
         .AddLogging()

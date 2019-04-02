@@ -13,6 +13,8 @@ namespace bi.data.pg
 {
   public class PgBiEventRepository : PgRepository<BiEventRoot>, IBiEventRepository
   {
+    const string SCHEMA = "bi";
+
     public PgBiEventRepository(IDbContext context) : base(context)
     {
     }
@@ -24,45 +26,49 @@ namespace bi.data.pg
       {
         conn.Open();
 
-        IDictionary<string, dynamic> payload = item.Payload;
-        foreach(KeyValuePair<string, dynamic> record in payload.Skip(1))
+        IDictionary<string, IDictionary<string, object>> payload = item.Payload;
+        foreach(KeyValuePair<string, IDictionary<string, object>> record in payload.Skip(1))
         {
-          bool tableExists = this.TableExists(conn, record.Key);
-          if(!tableExists)
-          {
-            this.CreateTable(conn, record.Key, record.Value);
-          }
-
-          bool mustReplace = this.IfExistsMustReplace(record.Value);
-          if(mustReplace)
-          {
-            RemoveRecord(conn, record.Key, record.Value);
-          }
-
-          SaveRecord(conn, record.Key, record.Value);
+          this.EnsureTableAndSaveRecord(conn, record.Key, record.Value);
         }
 
-        KeyValuePair<string, dynamic> fact = payload.First();
-        return SaveRecord(conn, fact.Key, fact.Value);
+        KeyValuePair<string, IDictionary<string, object>> fact = payload.First();
+        return this.EnsureTableAndSaveRecord(conn, fact.Key, fact.Value);
       }
     }
 
     private void CreateTable(NpgsqlConnection conn, string name,
       IDictionary<string, object> values)
     {
-      using(NpgsqlCommand cmd = new NpgsqlCommand())
+      using (NpgsqlCommand cmd = new NpgsqlCommand())
       {
         cmd.Connection = conn;
-        cmd.CommandText = $@"CREATE TABLE bi.{name} (id int4 PRIMARY KEY,
+        cmd.CommandText = $@"CREATE TABLE {SCHEMA}.{name} (id int4 PRIMARY KEY,
 {this.GetColumnDefinitions(values)}
 );";
         cmd.ExecuteNonQuery();
       }
     }
 
+    private string EnsureTableAndSaveRecord(NpgsqlConnection conn, string tableName, IDictionary<string, object> values)
+    {
+      bool tableExists = this.TableExists(conn, tableName);
+      if (!tableExists)
+      {
+        this.CreateTable(conn, tableName, values);
+      }
+
+      bool mustReplace = this.IfExistsMustReplace(values);
+      if (mustReplace)
+      {
+        this.RemoveRecord(conn, tableName, values);
+      }
+
+      return this.SaveRecord(conn, tableName, values);
+    }
     private string GetColumnDefinitions(IDictionary<string, object> values)
     {
-      string[] columns = this.GetColumnNames(values);
+      string[] columns = this.GetColumnNames(values).Where(x => x != "id").ToArray();
       const string type = " varchar(200) NULL";
       return string.Join($"{type},", columns) + type;
     }
@@ -100,12 +106,11 @@ namespace bi.data.pg
       using(NpgsqlCommand cmd = new NpgsqlCommand())
       {
         cmd.Connection = conn;
-        cmd.CommandText = $"DELETE FROM {name} WHERE ID = '@id';";
-        cmd.Parameters.AddWithValue("id", id);
+        cmd.CommandText = $"DELETE FROM {SCHEMA}.{name} WHERE ID = @id;";
+        cmd.Parameters.AddWithValue("id", id.ToInt32());
         cmd.ExecuteNonQuery();
       }
     }
-
     private string SaveRecord(NpgsqlConnection conn, string name,
           IDictionary<string, object> values)
     {
@@ -114,8 +119,8 @@ namespace bi.data.pg
         cmd.Connection = conn;
 
         string[] columnNames = this.GetColumnNames(values);
-        cmd.CommandText = $"INSERT INTO {name} " +
-          $"('{string.Join("','", columnNames)}') " +
+        cmd.CommandText = $"INSERT INTO {SCHEMA}.{name} " +
+          $"({string.Join(",", columnNames)}) " +
           $"VALUES(@{string.Join(",@", columnNames)}) " +
           $"ON CONFLICT DO NOTHING RETURNING ID;";
 
@@ -135,13 +140,14 @@ namespace bi.data.pg
       using(NpgsqlCommand cmd = new NpgsqlCommand())
       {
         cmd.Connection = conn;
-        cmd.CommandText = @"SELECT EXISTS (
+        cmd.CommandText = $@"SELECT EXISTS (
 SELECT 1
 FROM   information_schema.tables
-WHERE  table_schema = 'bi'
-AND    table_name = '@name'
+WHERE  table_schema = @schema
+AND    table_name = @name
 );";
         cmd.Parameters.AddWithValue(nameof(name), name);
+        cmd.Parameters.AddWithValue("schema", SCHEMA);
         return cmd.ExecuteScalar().ToBool();
       }
     }

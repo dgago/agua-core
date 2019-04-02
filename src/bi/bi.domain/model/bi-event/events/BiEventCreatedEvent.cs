@@ -10,7 +10,7 @@ namespace bi.domain.model.bi_event
     internal BiEventCreatedEvent(
       string id,
       string name,
-      IDictionary<string, dynamic> payload,
+      IDictionary<string, IDictionary<string, object>> payload,
       DateTime createdDate)
       : base(createdDate)
     {
@@ -21,6 +21,6 @@ namespace bi.domain.model.bi_event
 
     public string Id { get; }
     public string Name { get; }
-    public IDictionary<string, dynamic> Payload { get; }
+    public IDictionary<string, IDictionary<string, object>> Payload { get; }
   }
 }

@@ -48,9 +48,10 @@ namespace bi.domain.app.commands
       string factName = command.Name;
 
       // parses event payload taking into account the catalog of allowed events
-      IDictionary<string, dynamic> parts = this._bieventDs.ParsePayload(
-        command.Name,
-        command.Payload);
+      IDictionary<string, IDictionary<string, object>> parts = 
+        this._bieventDs.ParsePayload(
+          command.Name,
+          command.Payload);
 
       // validates event consistency
       BiEventRoot item = new BiEventRoot(

@@ -17,7 +17,7 @@ namespace bi.domain.model.bi_event
       string id,
       string owner,
       string name,
-      IDictionary<string, dynamic> payload,
+      IDictionary<string, IDictionary<string, object>> payload,
       uint version = 0)
       : base(id, owner, null, version)
     {
@@ -38,23 +38,23 @@ namespace bi.domain.model.bi_event
       }
     }
 
+    private IDictionary<string, IDictionary<string, object>> ValidatePayload(
+      IDictionary<string, IDictionary<string, object>> dictionary)
+    {
+      return dictionary;
+    }
+
     public DateTime CreatedDate { get; }
 
     public string Name { get; }
 
-    public IDictionary<string, dynamic> Payload { get; }
+    public IDictionary<string, IDictionary<string, object>> Payload { get; }
 
     protected override TData ToData<TData>()
     {
       throw new NotImplementedException();
     }
 
-    private IDictionary<string, dynamic> ValidatePayload(
-      IDictionary<string, dynamic> dictionary)
-    {
-      // TODO: validar payload
-      return dictionary;
-    }
 
     //public string Result { get; }
 

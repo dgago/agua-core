@@ -1,14 +1,18 @@
 ﻿{
-	"id": 112,
-	"count": 5,
-	"type": {
-		"id": 1,
-		"code": "T1",
-		"name": "Tipo 1",
-		"description": "Tipo 1"
-	},
-	"category": {
-		"id": 2,
-		"name": "C2"
-	}
+  "id": 112,
+  "count": 5,
+  "kktype_key": 1,
+  "kkcategory_key": 2,
+  "kktype": {
+    "id": 1,
+    "code": "T1",
+    "name": "Tipo 1",
+    "description": "Tipo 2",
+    "_replace": 1
+  },
+  "kkcategory": {
+    "id": 2,
+    "name": "C2"
+  },
+  "_replace": 1
 }
