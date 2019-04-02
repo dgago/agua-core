@@ -1,0 +1,10 @@
+IF NOT EXISTS (SELECT name FROM sys.tables where name = 'DMExamLog')
+	CREATE TABLE [dbo].[DMExamLog](
+		[LogId] [int] IDENTITY(1,1) NOT NULL,
+		[Log] [nvarchar](500),
+		[CreatedOn] [datetime] NOT NULL
+	 CONSTRAINT [PK_DMExamLogId] PRIMARY KEY CLUSTERED 
+	(
+		[LogId] ASC
+	)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+	) ON [PRIMARY]

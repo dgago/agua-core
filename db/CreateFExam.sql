@@ -1,0 +1,56 @@
+IF NOT EXISTS (SELECT name FROM sys.tables where name = 'F_Exam')
+	CREATE TABLE [dbo].[F_Exam](
+		[EquipmentKey] [int] NOT NULL,
+        [PatientKey] [int] NOT NULL,
+        [ProcedureKey] [int] NOT NULL,
+        [PoolKey] [int],
+        [VisitTypeKey] [int],
+        [AdmissionTypeKey] [int],
+		[ExamStateKey] [int] NOT NULL,
+        [ScheduleDateKey] [int],
+        [ArrivalDateKey] [int],
+        [ExecuteStartDateKey] [int],
+        [ExecuteEndDatetKey] [int],
+        [AssessmentStartDateKey] [int],
+        [AssessmentEndDateKey] [int],
+        [ReportStartDateKey] [int],
+        [ReportEndDateKey] [int],
+        [CancelDateKey] [int],
+        [NoShowDateKey] [int],
+        [ScheduleTimeKey] [int],
+        [ArrivalTimeKey] [int],
+        [ExecuteTimeStartKey] [int],
+        [ExecuteTimeFinaltKey] [int],
+        [AssessmentTimeStartKey] [int],
+        [AssessmentTimeFinalKey] [int],
+        [ReportTimeStartKey] [int],
+        [ReportTimeFinalKey] [int],
+        [ScheduleHealthProfessionalKey] [int],
+        [ArrivalHealthProfessionalKey] [int],
+        [ExecuteHealthProfessionalKey] [int],
+        [AssessmentHealthProfessionalKey] [int],
+        [ReportHealthProfessionalKey] [int],
+        [CancelHealthProfessionalKey] [int],
+        [AccessionNbr] [nvarchar](255),
+        [InternalOrderId] [int],
+        [ExternalOrderId] [nvarchar] (255),
+        [WaitTimeToExecution] [int],
+        [WaitTimeToAssessment] [int],
+        [ExecutionTime] [int],
+        [AssessmentTime] [int],
+        [ExecuteToReportTime] [int],
+        [AssessmentToReportTime] [int],
+        [ReportingTime] [int],
+	 CONSTRAINT [PK_FExam] PRIMARY KEY CLUSTERED 
+	(
+		[EquipmentKey] ASC, [PatientKey], [ProcedureKey], [PoolKey], [VisitTypeKey], [ExamStateKey], [ScheduleDateKey] ASC, [ArrivalDateKey] ASC, [ExecuteStartDateKey] ASC,
+        [ExecuteEndDatetKey] ASC, [AssessmentEndDateKey] ASC, [AssessmentStartDateKey] ASC, [ReportStartDateKey] ASC, [ReportEndDateKey] ASC,
+        [CancelDateKey] ASC, [ScheduleTimeKey] ASC, [ArrivalTimeKey] ASC, [ExecuteTimeStartKey] ASC, [ExecuteTimeFinaltKey] ASC, [AssessmentTimeStartKey] ASC,
+        [AssessmentTimeFinalKey] ASC, [ReportTimeStartKey] ASC, [ReportTimeFinalKey] ASC, [ScheduleHealthProfessionalKey], [ArrivalHealthProfessionalKey],
+        [ExecuteHealthProfessionalKey], [AssessmentHealthProfessionalKey], [ReportHealthProfessionalKey], [CancelHealthProfessionalKey], [NoShowDateKey], [AccessionNbr],
+        [AdmissionTypeKey]
+	)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+	) ON [PRIMARY]
+
+
+    
